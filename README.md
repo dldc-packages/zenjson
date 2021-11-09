@@ -1,4 +1,4 @@
-# 🏯 ZenJSON [![Build Status](https://travis-ci.com/etienne-dldc/zenjson.svg?branch=master)](https://travis-ci.com/etienne-dldc/zenjson) [![](https://badgen.net/bundlephobia/minzip/zenjson)](https://bundlephobia.com/result?p=zenjson) [![codecov](https://codecov.io/gh/etienne-dldc/zenjson/branch/master/graph/badge.svg)](https://codecov.io/gh/etienne-dldc/zenjson)
+# 🏯 ZenJSON ![Travis (.com)](https://img.shields.io/travis/com/etienne-dldc/zenjson) ![npm bundle size](https://img.shields.io/bundlephobia/min/zenjson) ![Codecov](https://img.shields.io/codecov/c/gh/etienne-dldc/zenjson)
 
 > Transform custom types into JSON-compatible data.
 
