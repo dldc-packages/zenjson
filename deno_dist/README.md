@@ -15,13 +15,13 @@ ZenJSON allow you to transform you data into a new one that can safely be `seria
 Here is a gist:
 
 ```ts
-import { sanitize, restore } from "https://deno.land/x/zenjson@v1.0.0/mod.ts";
+import { sanitize, restore } from 'https://deno.land/x/zenjson/mod.ts';
 
 const data = {
   createdAt: new Date(),
   nested: {
-    array: [Infinity, undefined, NaN]
-  }
+    array: [Infinity, undefined, NaN],
+  },
 };
 
 // sanitize your data before calling JSON.stringify
@@ -46,7 +46,9 @@ yarn add zenjson
 You can also use this package in Deno / Recent Browser using ESM import like this:
 
 ```js
-import { sanitize, restore } from "https://deno.land/x/zenjson@v1.0.0/mod.ts";
+// don't forget to fix the version, for example https://deno.land/x/zenjson@v1.0.0/mod.ts
+// open https://deno.land/x/zenjson/mod.ts to find the latest one
+import { sanitize, restore } from 'https://deno.land/x/zenjson/mod.ts';
 ```
 
 ## Suported data type
@@ -80,14 +82,14 @@ These functions take one argument: the list of supported types. The defaults sup
 If you use one of the `create` function you probably want to add your own custom type:
 
 ```ts
-import { createSanitize, defaultTypes } from "https://deno.land/x/zenjson@v1.0.0/mod.ts";
+import { createSanitize, defaultTypes } from 'https://deno.land/x/zenjson/mod.ts';
 
 const sanitize = createSanitize([
   // copy the default types
   ...defaultTypes,
   // add your own type (keep reading to find out how to create this)
-  myCustomType
-])
+  myCustomType,
+]);
 ```
 
 ## Creating a custom type
@@ -104,14 +106,14 @@ A custom type is an object with the following properties:
 Here is an example of a custom type that handles [BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt):
 
 ```ts
-import { createSanitize, createRestore, defaultTypes } from "https://deno.land/x/zenjson@v1.0.0/mod.ts";
+import { createSanitize, createRestore, defaultTypes } from 'https://deno.land/x/zenjson/mod.ts';
 
 const bigintType = {
   name: 'bigint',
   check: (val) => typeof val === 'bigint',
   sanitize: (val) => val.toString(),
   restore: (val) => BigInt(val),
-}
+};
 
 const sanitize = createSanitize([...defaultTypes, bigintType]);
 const restore = createRestore([...defaultTypes, bigintType]);
@@ -138,7 +140,7 @@ You might be wonderring what happens if your data looks like one of the sanitize
 
 ```js
 const data = {
-  keys: ['date', 'time']
+  keys: ['date', 'time'],
 };
 ```
 
@@ -151,7 +153,7 @@ In the example above the result of `sanitize(data)` is:
 ```js
 const result = {
   keys: ['array', ['date', 'time']],
-}
+};
 ```
 
 Which is correctly `restore`d into the original object.
@@ -172,11 +174,11 @@ const setType = {
     // extract list of values
     const setValues = Array.from(set.values());
     // use ctx.sanitize to sanitize items inside the set
-    return setValues.map(item => ctx.sanitize(item));
+    return setValues.map((item) => ctx.sanitize(item));
   },
   restore: (val, ctx) => {
-    const restoredValues = val.map(item => ctx.restore(item));
+    const restoredValues = val.map((item) => ctx.restore(item));
     return new Set(restoredValues);
-  }
-}
+  },
+};
 ```
