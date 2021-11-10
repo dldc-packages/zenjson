@@ -1,4 +1,10 @@
-import { CustomTypes, defaultTypes, RestoreContext, validateTypes } from './types.ts';
+import {
+  CustomTypes,
+  defaultTypes,
+  RestoreContext,
+  validateTypes,
+  isSanitizedTuple,
+} from './types.ts';
 import { isPlainObject, mapObject } from './utils.ts';
 
 export function createRestore(customTypes: CustomTypes): typeof restore {
@@ -19,11 +25,11 @@ function restoreInternal(data: unknown, customTypes: CustomTypes): unknown {
     restore: (val) => tranverse(val),
   };
   function tranverse(item: unknown): unknown {
-    if (item && Array.isArray(item) && item.length === 2) {
+    if (isSanitizedTuple(item, validTypes)) {
       const [typeName, sanitized] = item;
       const type = customTypes.find((t) => t.name === typeName);
       if (!type) {
-        return item.map((v) => tranverse(v));
+        throw new Error('Unepected: custom type not found');
       }
       return type.restore(sanitized, restoreCtx);
     }

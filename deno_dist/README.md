@@ -10,7 +10,7 @@ JSON.stringify({ createdAt: new Date() });
 
 This works but the date is converted into a string so when you `JSON.parse` the result you don't get a `Date` back.
 
-ZenJSON allow you to transform you data into a new one that can safely be `serialized`. Of course you can also do the reverse operation to get back your original data.
+ZenJSON allow you to transform you data into a new one that can safely be `stringify`ed. Of course you can also do the reverse operation to get back your original data.
 
 Here is a gist:
 
@@ -46,9 +46,10 @@ yarn add zenjson
 You can also use this package in Deno / Recent Browser using ESM import like this:
 
 ```js
+import { sanitize, restore } from 'https://deno.land/x/zenjson/mod.ts';
+
 // don't forget to fix the version, for example https://deno.land/x/zenjson@v1.0.0/mod.ts
 // open https://deno.land/x/zenjson/mod.ts to find the latest one
-import { sanitize, restore } from 'https://deno.land/x/zenjson/mod.ts';
 ```
 
 ## Suported data type
@@ -62,7 +63,7 @@ By default ZenJSON supports the following types:
 
 ## How does it works
 
-When you call `sanitize`, ZenJSON will traverse your data and metch it against a list of custom types. When a value matches a type, it will replace the value into a tuple of two elements (the first element is the name of the type, the second is the sanitized value).
+When you call `sanitize`, ZenJSON will traverse your data and match it against a list of custom types. When a value matches a type, it will replace the value into a tuple of two elements (the first element is the name of the type, the second is the sanitized value).
 
 For example if you call `sanitize(NaN)` it will produce the following result: `['number', 'NaN']`.
 
@@ -146,7 +147,7 @@ const data = {
 
 This object might cause an error because the `restore` function will interpret the `['date', 'time']` as a sanitized value and will try to transform it into a date.
 
-To solve this ZenJSON include the `arrayType` i the list of default types. This type will tranform any array that looks like a sanitized tuple into a tuple `['array', __THE_ARRAY__]`.
+To solve this ZenJSON include the `arrayType` in the list of default types. This type will tranform any array that looks like a sanitized tuple into a tuple `['array', __THE_ARRAY__]`.
 
 In the example above the result of `sanitize(data)` is:
 

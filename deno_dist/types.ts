@@ -21,6 +21,19 @@ export type CustomType<T, Sanitized = unknown> = {
 
 export type CustomTypes = Array<CustomType<any, any>>;
 
+export function isSanitizedTuple(
+  item: unknown,
+  validTypes: ReadonlyArray<string>
+): item is [string, unknown] {
+  return Boolean(
+    item &&
+      Array.isArray(item) &&
+      item.length === 2 &&
+      typeof item[0] === 'string' &&
+      validTypes.includes(item[0])
+  );
+}
+
 export const dateType: CustomType<Date, string> = {
   name: 'date',
   check: (val) => val instanceof Date,
@@ -70,15 +83,8 @@ export const specialNumberType: CustomType<number, 'Infinity' | '-Infinity' | 'N
 // detect array that would be restored as custom type and convert them into a custom type
 export const arrayType: CustomType<Array<any>, Array<any>> = {
   name: 'array',
-  check: (val, ctx) =>
-    Boolean(
-      val &&
-        Array.isArray(val) &&
-        val.length > 0 &&
-        typeof val[0] === 'string' &&
-        ctx.validTypes.includes(val[0])
-    ),
-  sanitize: (val, ctx) => [val[0], ...val.slice(1).map((v) => ctx.sanitize(v))],
+  check: (val, ctx) => isSanitizedTuple(val, ctx.validTypes),
+  sanitize: (val, ctx) => val.map((v) => ctx.sanitize(v)),
   restore: (val, ctx) => val.map((v) => ctx.restore(v)),
 };
 
