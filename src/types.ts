@@ -21,16 +21,9 @@ export type CustomType<T, Sanitized = unknown> = {
 
 export type CustomTypes = Array<CustomType<any, any>>;
 
-export function isSanitizedTuple(
-  item: unknown,
-  validTypes: ReadonlyArray<string>
-): item is [string, unknown] {
+export function isSanitizedTuple(item: unknown, validTypes: ReadonlyArray<string>): item is [string, unknown] {
   return Boolean(
-    item &&
-      Array.isArray(item) &&
-      item.length === 2 &&
-      typeof item[0] === 'string' &&
-      validTypes.includes(item[0])
+    item && Array.isArray(item) && item.length === 2 && typeof item[0] === 'string' && validTypes.includes(item[0])
   );
 }
 

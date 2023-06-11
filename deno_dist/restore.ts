@@ -1,10 +1,4 @@
-import {
-  CustomTypes,
-  defaultTypes,
-  RestoreContext,
-  validateTypes,
-  isSanitizedTuple,
-} from './types.ts';
+import { CustomTypes, defaultTypes, RestoreContext, validateTypes, isSanitizedTuple } from './types.ts';
 import { isPlainObject, mapObject } from './utils.ts';
 
 export function createRestore(customTypes: CustomTypes): typeof restore {

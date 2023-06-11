@@ -1,4 +1,5 @@
-import { sanitize, restore } from '../src/mod';
+import { expect, test } from 'vitest';
+import { restore, sanitize } from '../src/mod';
 
 const VALUES = [
   '',

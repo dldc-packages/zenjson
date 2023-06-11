@@ -25,10 +25,7 @@ export function isPlainObject(o: unknown): o is Record<string, unknown> {
   return true;
 }
 
-export function mapObject(
-  obj: Record<string, any>,
-  mapper: (v: any, key: string) => any
-): Record<string, any> {
+export function mapObject(obj: Record<string, any>, mapper: (v: any, key: string) => any): Record<string, any> {
   const res: Record<string, any> = {};
   for (const [key, val] of Object.entries(obj)) {
     res[key] = mapper(val, key);
