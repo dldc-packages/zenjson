@@ -1,5 +1,5 @@
 {
-  "name": "zenjson",
+  "name": "@dldc/zenjson",
   "version": "1.0.6",
   "description": "Transform custom types into JSON-compatible data.",
   "keywords": [
@@ -7,13 +7,13 @@
     "parse",
     "serialize"
   ],
-  "homepage": "https://github.com/etienne-dldc/zenjson#readme",
+  "homepage": "https://github.com/dldc-packages/zenjson#readme",
   "bugs": {
-    "url": "https://github.com/etienne-dldc/zenjson/issues"
+    "url": "https://github.com/dldc-packages/zenjson/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/etienne-dldc/zenjson.git"
+    "url": "git+https://github.com/dldc-packages/zenjson.git"
   },
   "license": "MIT",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
