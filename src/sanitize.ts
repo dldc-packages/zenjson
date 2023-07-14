@@ -1,4 +1,5 @@
-import { CheckContext, CustomTypes, defaultTypes, SanitizeContext, validateTypes } from './types';
+import type { CheckContext, CustomTypes, SanitizeContext } from './types';
+import { defaultTypes, validateTypes } from './types';
 import { isPlainObject, mapObject } from './utils';
 
 export function createSanitize(customTypes: CustomTypes): typeof sanitize {

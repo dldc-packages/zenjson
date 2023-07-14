@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { CustomType, createSanitize, defaultTypes, sanitize } from '../src/mod';
+import type { CustomType } from '../src/mod';
+import { createSanitize, defaultTypes, sanitize } from '../src/mod';
 
 test('sanitize primitive', () => {
   expect(sanitize('foo')).toBe('foo');

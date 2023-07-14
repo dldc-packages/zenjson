@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { CustomType, createRestore, defaultTypes, restore } from '../src/mod';
+import type { CustomType } from '../src/mod';
+import { createRestore, defaultTypes, restore } from '../src/mod';
 
 test('restore primitive', () => {
   expect(restore('foo')).toBe('foo');

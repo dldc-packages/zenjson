@@ -19,7 +19,7 @@ const VALUES = [
 ];
 
 for (const value of VALUES) {
-  test(`Identity ${value}`, () => {
+  test(`Identity ${value?.toString()}`, () => {
     expect(restore(JSON.parse(JSON.stringify(sanitize(value))))).toEqual(value);
   });
 }

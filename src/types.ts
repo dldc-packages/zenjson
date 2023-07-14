@@ -69,7 +69,7 @@ export const specialNumberType: CustomType<number, 'Infinity' | '-Infinity' | 'N
     if (str === 'Infinity') {
       return Infinity;
     }
-    throw new Error(`Invalid serialized special number: ${str}`);
+    throw new Error(`Invalid serialized special number: ${String(str)}`);
   },
 };
 

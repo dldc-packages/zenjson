@@ -16,8 +16,8 @@ export function isPlainObject(o: unknown): o is Record<string, unknown> {
   if (isObject(prot) === false) return false;
 
   // If constructor does not have an Object-specific method
-  // eslint-disable-next-line no-prototype-builtins
-  if ((prot as any).hasOwnProperty('isPrototypeOf') === false) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  if (prot.hasOwnProperty('isPrototypeOf') === false) {
     return false;
   }
 
