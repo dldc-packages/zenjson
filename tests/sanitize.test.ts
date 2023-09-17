@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import type { CustomType } from '../src/mod';
+import type { ICustomType } from '../src/mod';
 import { createSanitize, defaultTypes, sanitize } from '../src/mod';
 
 test('sanitize primitive', () => {
@@ -46,7 +46,7 @@ describe('createSanitize', () => {
     expect(() => createSanitize([...defaultTypes, ...defaultTypes])).toThrow();
   });
 
-  const mapType: CustomType<Map<any, any>, Array<[any, any]>> = {
+  const mapType: ICustomType<Map<any, any>, Array<[any, any]>> = {
     name: 'map',
     check: (val) => val instanceof Map,
     sanitize: (val) => Array.from(val.entries()),

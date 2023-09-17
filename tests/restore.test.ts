@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import type { CustomType } from '../src/mod';
+import type { ICustomType } from '../src/mod';
 import { createRestore, defaultTypes, restore } from '../src/mod';
 
 test('restore primitive', () => {
@@ -50,7 +50,7 @@ describe('createRestore', () => {
     expect(() => createRestore([...defaultTypes, ...defaultTypes])).toThrow();
   });
 
-  const mapType: CustomType<Map<any, any>, Array<[any, any]>> = {
+  const mapType: ICustomType<Map<any, any>, Array<[any, any]>> = {
     name: 'map',
     check: (val) => val instanceof Map,
     sanitize: (val) => Array.from(val.entries()),

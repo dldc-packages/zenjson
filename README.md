@@ -93,9 +93,9 @@ const sanitize = createSanitize([
 ]);
 ```
 
-## Creating a custom type
+## Defining a custom type
 
-**Note**: If you use TypeScript you can use the `CustomType` export to defined you types.
+**Note**: If you use TypeScript you can use the `ICustomType` export to defined you types.
 
 A custom type is an object with the following properties:
 
@@ -183,3 +183,19 @@ const setType = {
   },
 };
 ```
+
+## Using `ctx.state`
+
+For more advanced use case you can use the `ctx.state` to store data outside of the sanitized / restored data. This object is a `ITypedMap` (a `WeakMap` that use a special key to enforce type safety).
+
+When you call `sanitize` or `restore` you can pass a second argument that will be used as the initial state of the `ctx.state`.
+
+```ts
+const sanitize = createSanitize([...defaultTypes, someSpecialTypeThatUsesCtxState]);
+const state = createTypedMap();
+const sanitized = sanitize(data, state);
+// do something with the state
+state.get(someKey);
+```
+
+Take a look at [this test file]('./tests/files.test.ts) for an example.

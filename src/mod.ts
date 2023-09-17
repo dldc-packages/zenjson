@@ -1,4 +1,15 @@
-export { createSanitize, sanitize } from './sanitize';
 export { createRestore, restore } from './restore';
-export { arrayType, dateType, specialNumberType, undefinedType, defaultTypes } from './types';
-export type { CheckContext, CustomType, CustomTypes, RestoreContext, SanitizeContext } from './types';
+export { createSanitize, sanitize } from './sanitize';
+export { createTypedKey, createTypedMap, type ITypedKey, type ITypedMap } from './typedMap';
+export {
+  arrayType,
+  dateType,
+  defaultTypes,
+  specialNumberType,
+  undefinedType,
+  type ICheckContext,
+  type ICustomType,
+  type IRestoreContext,
+  type ISanitizeContext,
+  type TCustomTypes,
+} from './types';

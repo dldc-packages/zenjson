@@ -1,26 +1,30 @@
-import type { CheckContext, CustomTypes, SanitizeContext } from './types';
+import type { ITypedMap } from './typedMap';
+import { createTypedMap } from './typedMap';
+import type { ICheckContext, ISanitizeContext, TCustomTypes } from './types';
 import { defaultTypes, validateTypes } from './types';
 import { isPlainObject, mapObject } from './utils';
 
-export function createSanitize(customTypes: CustomTypes): typeof sanitize {
+export function createSanitize(customTypes: TCustomTypes): typeof sanitize {
   validateTypes(customTypes);
-  return function sanitize(data: unknown): unknown {
-    return sanitizeInternal(data, customTypes);
+  return function sanitize(data: unknown, state?: ITypedMap): unknown {
+    return sanitizeInternal(data, customTypes, state);
   };
 }
 
-export function sanitize(data: unknown): unknown {
-  return sanitizeInternal(data, defaultTypes);
+export function sanitize(data: unknown, state?: ITypedMap): unknown {
+  return sanitizeInternal(data, defaultTypes, state);
 }
 
-function sanitizeInternal(data: unknown, customTypes: CustomTypes): unknown {
+function sanitizeInternal(data: unknown, customTypes: TCustomTypes, state: ITypedMap = createTypedMap()): unknown {
   const validTypes = customTypes.map((t) => t.name);
-  const checkCtx: CheckContext = {
+  const checkCtx: ICheckContext = {
     validTypes,
+    state,
   };
-  const sanitizeCtx: SanitizeContext = {
+  const sanitizeCtx: ISanitizeContext = {
     validTypes,
     sanitize: (val) => tranverse(val),
+    state,
   };
   function tranverse(item: unknown): unknown {
     const type = customTypes.find((t) => t.check(item, checkCtx));
