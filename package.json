@@ -84,6 +84,9 @@
     },
     "root": true
   },
+  "dependencies": {
+    "@dldc/erreur": "^6.0.0"
+  },
   "devDependencies": {
     "@types/node": "^20.8.10",
     "@typescript-eslint/eslint-plugin": "^6.9.1",
@@ -121,8 +124,5 @@
       "release": true,
       "web": true
     }
-  },
-  "dependencies": {
-    "@dldc/erreur": "^6.0.0"
   }
 }
