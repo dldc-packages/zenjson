@@ -1,3 +1,4 @@
+export { ZenjsonErreur, ZenjsonErreurKey, type TZenjsonErreurData } from './erreur';
 export { createRestore, restore } from './restore';
 export { createSanitize, sanitize } from './sanitize';
 export { createTypedKey, createTypedMap, type ITypedKey, type ITypedMap } from './typedMap';

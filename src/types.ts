@@ -1,3 +1,4 @@
+import { ZenjsonErreur } from './erreur';
 import type { ITypedMap } from './typedMap';
 
 export interface ICheckContext {
@@ -62,7 +63,7 @@ export const specialNumberType: ICustomType<number, 'Infinity' | '-Infinity' | '
     if (val === -Infinity) {
       return '-Infinity';
     }
-    throw new Error(`Unexpected special number value ${val}`);
+    throw ZenjsonErreur.UnexpectedSpecialValue(val);
   },
   restore: (str) => {
     if (str === 'NaN') {
@@ -74,7 +75,7 @@ export const specialNumberType: ICustomType<number, 'Infinity' | '-Infinity' | '
     if (str === 'Infinity') {
       return Infinity;
     }
-    throw new Error(`Invalid serialized special number: ${String(str)}`);
+    throw ZenjsonErreur.InvalidSerializedSpecialValue(str);
   },
 };
 
@@ -92,7 +93,7 @@ export function validateTypes(types: TCustomTypes): void {
   const names = new Set();
   types.forEach((type) => {
     if (names.has(type.name)) {
-      throw new Error(`Invalid custom type list: duplicate type name: "${type.name}"`);
+      throw ZenjsonErreur.DuplicatedCustomTypeName(type.name);
     }
     names.add(type.name);
   });

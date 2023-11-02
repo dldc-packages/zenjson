@@ -1,3 +1,4 @@
+import { ZenjsonErreur } from './erreur';
 import type { ITypedMap } from './typedMap';
 import { createTypedMap } from './typedMap';
 import type { IRestoreContext, TCustomTypes } from './types';
@@ -27,7 +28,7 @@ function restoreInternal(data: unknown, customTypes: TCustomTypes, state: ITyped
       const [typeName, sanitized] = item;
       const type = customTypes.find((t) => t.name === typeName);
       if (!type) {
-        throw new Error('Unepected: custom type not found');
+        throw ZenjsonErreur.CustomTypeNotFound(typeName);
       }
       return type.restore(sanitized, restoreCtx);
     }
