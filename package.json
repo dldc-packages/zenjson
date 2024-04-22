@@ -1,6 +1,6 @@
 {
   "name": "@dldc/zenjson",
-  "version": "2.0.3",
+  "version": "3.0.0",
   "description": "Transform custom types into JSON-compatible data.",
   "keywords": [
     "json",
