@@ -1,5 +1,4 @@
-import type { TKey } from '@dldc/erreur';
-import { Erreur, Key } from '@dldc/erreur';
+import { createErreurStore } from '@dldc/erreur';
 
 export type TZenjsonErreurData =
   | { kind: 'CustomTypeNotFound'; typeName: string }
@@ -8,32 +7,38 @@ export type TZenjsonErreurData =
   | { kind: 'InvalidSerializedSpecialValue'; value: string }
   | { kind: 'DuplicatedCustomTypeName'; typeName: string };
 
-export const ZenjsonErreurKey: TKey<TZenjsonErreurData, false> = Key.create<TZenjsonErreurData>('ZenjsonErreur');
+const ZenjsonErreurInternal = createErreurStore<TZenjsonErreurData>();
 
-export const ZenjsonErreur = {
-  CustomTypeNotFound: (typeName: string) => {
-    return Erreur.create(new Error('Unexpected: custom type not found'))
-      .with(ZenjsonErreurKey.Provider({ kind: 'CustomTypeNotFound', typeName }))
-      .withName('ZenjsonErreur');
-  },
-  KeyNotFound: (keyName: string) => {
-    return Erreur.create(new Error(`Key ${keyName} not found`))
-      .with(ZenjsonErreurKey.Provider({ kind: 'KeyNotFound', keyName }))
-      .withName('ZenjsonErreur');
-  },
-  UnexpectedSpecialValue: (value: unknown) => {
-    return Erreur.create(new Error(`Unexpected special number value ${String(value)}`))
-      .with(ZenjsonErreurKey.Provider({ kind: 'UnexpectedSpecialValue', value }))
-      .withName('ZenjsonErreur');
-  },
-  InvalidSerializedSpecialValue: (value: string) => {
-    return Erreur.create(new Error(`Invalid serialized special number: ${value}`))
-      .with(ZenjsonErreurKey.Provider({ kind: 'InvalidSerializedSpecialValue', value }))
-      .withName('ZenjsonErreur');
-  },
-  DuplicatedCustomTypeName: (typeName: string) => {
-    return Erreur.create(new Error(`Invalid custom type list: duplicated type name: "${typeName}"`))
-      .with(ZenjsonErreurKey.Provider({ kind: 'DuplicatedCustomTypeName', typeName }))
-      .withName('ZenjsonErreur');
-  },
-};
+export const ZenjsonErreur = ZenjsonErreurInternal.asReadonly;
+
+export function throwCustomTypeNotFound(typeName: string): never {
+  return ZenjsonErreurInternal.setAndThrow(`Unexpected: custom type "${typeName}" not found`, {
+    kind: 'CustomTypeNotFound',
+    typeName,
+  });
+}
+
+export function throwKeyNotFound(keyName: string): never {
+  return ZenjsonErreurInternal.setAndThrow(`Key "${keyName}" not found`, { kind: 'KeyNotFound', keyName });
+}
+
+export function throwUnexpectedSpecialValue(value: unknown): never {
+  return ZenjsonErreurInternal.setAndThrow(`Unexpected special number value ${String(value)}`, {
+    kind: 'UnexpectedSpecialValue',
+    value,
+  });
+}
+
+export function throwInvalidSerializedSpecialValue(value: string): never {
+  return ZenjsonErreurInternal.setAndThrow(`Invalid serialized special number: ${value}`, {
+    kind: 'InvalidSerializedSpecialValue',
+    value,
+  });
+}
+
+export function throwDuplicatedCustomTypeName(typeName: string): never {
+  return ZenjsonErreurInternal.setAndThrow(`Invalid custom type list: duplicated type name: "${typeName}"`, {
+    kind: 'DuplicatedCustomTypeName',
+    typeName,
+  });
+}

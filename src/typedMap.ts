@@ -1,4 +1,4 @@
-import { ZenjsonErreur } from './erreur';
+import { throwKeyNotFound } from './erreur';
 
 const TYPED_KEY = Symbol('TYPED_KEY');
 
@@ -53,7 +53,7 @@ export function createTypedMap(): ITypedMap {
   function getOrFail<T>(key: ITypedKey<T>): T {
     const value = get(key);
     if (value === undefined) {
-      throw ZenjsonErreur.KeyNotFound(key.name);
+      return throwKeyNotFound(key.name);
     }
     return value;
   }
