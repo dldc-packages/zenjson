@@ -1,9 +1,9 @@
-import { throwCustomTypeNotFound } from './erreur';
-import type { ITypedMap } from './typedMap';
-import { createTypedMap } from './typedMap';
-import type { IRestoreContext, TCustomTypes } from './types';
-import { defaultTypes, isSanitizedTuple, validateTypes } from './types';
-import { isPlainObject, mapObject } from './utils';
+import { throwCustomTypeNotFound } from "./erreur.ts";
+import type { ITypedMap } from "./typedMap.ts";
+import { createTypedMap } from "./typedMap.ts";
+import type { IRestoreContext, TCustomTypes } from "./types.ts";
+import { defaultTypes, isSanitizedTuple, validateTypes } from "./types.ts";
+import { isPlainObject, mapObject } from "./utils.ts";
 
 export function createRestore(customTypes: TCustomTypes): typeof restore {
   validateTypes(customTypes);
@@ -16,7 +16,11 @@ export function restore(data: unknown, state?: ITypedMap): unknown {
   return restoreInternal(data, defaultTypes, state);
 }
 
-function restoreInternal(data: unknown, customTypes: TCustomTypes, state: ITypedMap = createTypedMap()): unknown {
+function restoreInternal(
+  data: unknown,
+  customTypes: TCustomTypes,
+  state: ITypedMap = createTypedMap(),
+): unknown {
   const validTypes = customTypes.map((t) => t.name);
   const restoreCtx: IRestoreContext = {
     validTypes,

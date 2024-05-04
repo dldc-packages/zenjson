@@ -1,62 +1,72 @@
-import { describe, expect, test } from 'vitest';
-import type { ICustomType } from '../src/mod';
-import { createSanitize, defaultTypes, sanitize } from '../src/mod';
+// deno-lint-ignore-file no-explicit-any
 
-test('sanitize primitive', () => {
-  expect(sanitize('foo')).toBe('foo');
+import { expect } from "$std/expect/mod.ts";
+import {
+  createSanitize,
+  defaultTypes,
+  type ICustomType,
+  sanitize,
+} from "../mod.ts";
+
+Deno.test("sanitize primitive", () => {
+  expect(sanitize("foo")).toBe("foo");
   expect(sanitize(42)).toBe(42);
   expect(sanitize(null)).toBe(null);
 });
 
-test('sanitize object and array', () => {
+Deno.test("sanitize object and array", () => {
   expect(sanitize([1, 2, 3])).toEqual([1, 2, 3]);
   expect(sanitize({ a: true, b: false })).toEqual({ a: true, b: false });
 });
 
-test('sanitize return a new object', () => {
+Deno.test("sanitize return a new object", () => {
   const obj = { a: true, b: false };
   expect(sanitize(obj)).toEqual({ a: true, b: false });
   expect(sanitize(obj)).not.toBe(obj);
 });
 
-test('sanitize undefined', () => {
-  expect(sanitize(undefined)).toEqual(['undefined', null]);
+Deno.test("sanitize undefined", () => {
+  expect(sanitize(undefined)).toEqual(["undefined", null]);
 });
 
-test('sanitize undefined in array', () => {
-  expect(sanitize([undefined])).toEqual([['undefined', null]]);
+Deno.test("sanitize undefined in array", () => {
+  expect(sanitize([undefined])).toEqual([["undefined", null]]);
 });
 
-test('sanitize array when it look like sanitized value', () => {
-  expect(sanitize(['undefined', null])).toEqual(['array', ['undefined', null]]);
+Deno.test("sanitize array when it look like sanitized value", () => {
+  expect(sanitize(["undefined", null])).toEqual(["array", ["undefined", null]]);
 });
 
-test('sanitize special numbers', () => {
-  expect(sanitize(NaN)).toEqual(['number', 'NaN']);
-  expect(sanitize(Infinity)).toEqual(['number', 'Infinity']);
-  expect(sanitize(-Infinity)).toEqual(['number', '-Infinity']);
+Deno.test("sanitize special numbers", () => {
+  expect(sanitize(NaN)).toEqual(["number", "NaN"]);
+  expect(sanitize(Infinity)).toEqual(["number", "Infinity"]);
+  expect(sanitize(-Infinity)).toEqual(["number", "-Infinity"]);
 });
 
-test('sanitize Date', () => {
-  expect(sanitize(new Date(Date.UTC(2021, 6, 20)))).toEqual(['date', '2021-07-20T00:00:00.000Z']);
+Deno.test("sanitize Date", () => {
+  expect(sanitize(new Date(Date.UTC(2021, 6, 20)))).toEqual([
+    "date",
+    "2021-07-20T00:00:00.000Z",
+  ]);
 });
 
-describe('createSanitize', () => {
-  test('fail if multiple types have the same name', () => {
-    expect(() => createSanitize([...defaultTypes, ...defaultTypes])).toThrow();
-  });
+Deno.test("fail if multiple types have the same name", () => {
+  expect(() => createSanitize([...defaultTypes, ...defaultTypes])).toThrow();
+});
 
-  const mapType: ICustomType<Map<any, any>, Array<[any, any]>> = {
-    name: 'map',
-    check: (val) => val instanceof Map,
-    sanitize: (val) => Array.from(val.entries()),
-    restore: (entries) => new Map(entries),
-  };
+const mapType: ICustomType<Map<any, any>, Array<[any, any]>> = {
+  name: "map",
+  check: (val) => val instanceof Map,
+  sanitize: (val) => Array.from(val.entries()),
+  restore: (entries) => new Map(entries),
+};
 
-  const sanitize = createSanitize([...defaultTypes, mapType]);
+const sanitizeCustom = createSanitize([...defaultTypes, mapType]);
 
-  test('custom type is used', () => {
-    expect(sanitize(new Map())).toEqual(['map', []]);
-    expect(sanitize(new Map([['foo', 42]]))).toEqual(['map', [['foo', 42]]]);
-  });
+Deno.test("custom type is used", () => {
+  expect(sanitizeCustom(new Map())).toEqual(["map", []]);
+  expect(sanitizeCustom(new Map([["foo", 42]]))).toEqual(["map", [[
+    "foo",
+    42,
+  ]]]);
 });

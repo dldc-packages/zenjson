@@ -1,6 +1,6 @@
-import { throwKeyNotFound } from './erreur';
+import { throwKeyNotFound } from "./erreur.ts";
 
-const TYPED_KEY = Symbol('TYPED_KEY');
+const TYPED_KEY = Symbol("TYPED_KEY");
 
 export interface ITypedKey<T> {
   readonly [TYPED_KEY]: T;
@@ -23,10 +23,15 @@ export interface ITypedMap {
   delete<T>(key: ITypedKey<T>): void;
   update<T>(key: ITypedKey<T>, updater: (value: T | undefined) => T): void;
   updateOrFail<T>(key: ITypedKey<T>, updater: (value: T) => T): void;
-  updateOrDefault<T>(key: ITypedKey<T>, defaultValue: T, updater: (value: T) => T): void;
+  updateOrDefault<T>(
+    key: ITypedKey<T>,
+    defaultValue: T,
+    updater: (value: T) => T,
+  ): void;
 }
 
 export function createTypedMap(): ITypedMap {
+  // deno-lint-ignore no-explicit-any
   const data = new WeakMap<ITypedKey<any>, unknown>();
 
   return {
@@ -70,7 +75,10 @@ export function createTypedMap(): ITypedMap {
     data.delete(key);
   }
 
-  function update<T>(key: ITypedKey<T>, updater: (value: T | undefined) => T): void {
+  function update<T>(
+    key: ITypedKey<T>,
+    updater: (value: T | undefined) => T,
+  ): void {
     set(key, updater(get(key)));
   }
 
@@ -78,7 +86,11 @@ export function createTypedMap(): ITypedMap {
     set(key, updater(getOrFail(key)));
   }
 
-  function updateOrDefault<T>(key: ITypedKey<T>, defaultValue: T, updater: (value: T) => T): void {
+  function updateOrDefault<T>(
+    key: ITypedKey<T>,
+    defaultValue: T,
+    updater: (value: T) => T,
+  ): void {
     set(key, updater(getOrDefault(key, defaultValue)));
   }
 }

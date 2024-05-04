@@ -1,10 +1,10 @@
-import { expect, test } from 'vitest';
-import { restore, sanitize } from '../src/mod';
+import { expect } from "$std/expect/mod.ts";
+import { restore, sanitize } from "../mod.ts";
 
 const VALUES = [
-  '',
-  'foo',
-  ' ',
+  "",
+  "foo",
+  " ",
   0,
   -1,
   Infinity,
@@ -19,7 +19,7 @@ const VALUES = [
 ];
 
 for (const value of VALUES) {
-  test(`Identity ${value?.toString()}`, () => {
+  Deno.test(`Identity ${value?.toString()}`, () => {
     expect(restore(JSON.parse(JSON.stringify(sanitize(value))))).toEqual(value);
   });
 }

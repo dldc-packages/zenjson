@@ -1,9 +1,11 @@
+// deno-lint-ignore-file no-explicit-any
+
 import {
   throwDuplicatedCustomTypeName,
   throwInvalidSerializedSpecialValue,
   throwUnexpectedSpecialValue,
-} from './erreur';
-import type { ITypedMap } from './typedMap';
+} from "./erreur.ts";
+import type { ITypedMap } from "./typedMap.ts";
 
 export interface ICheckContext {
   readonly validTypes: readonly string[];
@@ -31,14 +33,18 @@ export interface ICustomType<T, Sanitized = unknown> {
 
 export type TCustomTypes = readonly ICustomType<any, any>[];
 
-export function isSanitizedTuple(item: unknown, validTypes: readonly string[]): item is [string, unknown] {
+export function isSanitizedTuple(
+  item: unknown,
+  validTypes: readonly string[],
+): item is [string, unknown] {
   return Boolean(
-    item && Array.isArray(item) && item.length === 2 && typeof item[0] === 'string' && validTypes.includes(item[0]),
+    item && Array.isArray(item) && item.length === 2 &&
+      typeof item[0] === "string" && validTypes.includes(item[0]),
   );
 }
 
 export const dateType: ICustomType<Date, string> = {
-  name: 'date',
+  name: "date",
   check: (val) => val instanceof Date,
   sanitize: (val) => val.toISOString(),
   restore: (str) => {
@@ -48,35 +54,40 @@ export const dateType: ICustomType<Date, string> = {
 };
 
 export const undefinedType: ICustomType<undefined, null> = {
-  name: 'undefined',
+  name: "undefined",
   check: (val) => val === undefined,
   sanitize: () => null,
   restore: () => undefined,
 };
 
-export const specialNumberType: ICustomType<number, 'Infinity' | '-Infinity' | 'NaN'> = {
-  name: 'number',
-  check: (val) => typeof val === 'number' && (val === Infinity || val === -Infinity || isNaN(val)),
+export const specialNumberType: ICustomType<
+  number,
+  "Infinity" | "-Infinity" | "NaN"
+> = {
+  name: "number",
+  check: (val) =>
+    typeof val === "number" &&
+    (val === Infinity || val === -Infinity || isNaN(val)),
   sanitize: (val) => {
     if (isNaN(val)) {
-      return 'NaN';
+      return "NaN";
     }
     if (val === Infinity) {
-      return 'Infinity';
+      return "Infinity";
     }
     if (val === -Infinity) {
-      return '-Infinity';
+      return "-Infinity";
     }
     return throwUnexpectedSpecialValue(val);
   },
   restore: (str) => {
-    if (str === 'NaN') {
+    if (str === "NaN") {
       return NaN;
     }
-    if (str === '-Infinity') {
+    if (str === "-Infinity") {
       return -Infinity;
     }
-    if (str === 'Infinity') {
+    if (str === "Infinity") {
       return Infinity;
     }
     return throwInvalidSerializedSpecialValue(str);
@@ -85,13 +96,18 @@ export const specialNumberType: ICustomType<number, 'Infinity' | '-Infinity' | '
 
 // detect array that would be restored as custom type and convert them into a custom type
 export const arrayType: ICustomType<Array<any>, Array<any>> = {
-  name: 'array',
+  name: "array",
   check: (val, ctx) => isSanitizedTuple(val, ctx.validTypes),
   sanitize: (val, ctx) => val.map((v) => ctx.sanitize(v)),
   restore: (val, ctx) => val.map((v) => ctx.restore(v)),
 };
 
-export const defaultTypes: TCustomTypes = [dateType, undefinedType, specialNumberType, arrayType];
+export const defaultTypes: TCustomTypes = [
+  dateType,
+  undefinedType,
+  specialNumberType,
+  arrayType,
+];
 
 export function validateTypes(types: TCustomTypes): void {
   const names = new Set();

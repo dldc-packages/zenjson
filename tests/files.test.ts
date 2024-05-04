@@ -1,21 +1,31 @@
-import { expect, test } from 'vitest';
-import type { ICustomType } from '../src/mod';
-import { createRestore, createSanitize, createTypedKey, createTypedMap, defaultTypes } from '../src/mod';
+import { expect } from "$std/expect/mod.ts";
+import {
+  createRestore,
+  createSanitize,
+  createTypedKey,
+  createTypedMap,
+  defaultTypes,
+  type ICustomType,
+} from "../mod.ts";
 
-const filesKey = createTypedKey<Map<string, ArrayBuffer>>('files');
+const filesKey = createTypedKey<Map<string, ArrayBuffer>>("files");
 
 /**
  * This custom type replace files by a random name and store each files in the state so we can send them later
  */
 const fileType: ICustomType<ArrayBuffer, string> = {
-  name: 'file',
+  name: "file",
   check: (val) => val instanceof ArrayBuffer,
   sanitize: (val, ctx) => {
     const name = Math.random().toString(36).substring(2);
-    ctx.state.updateOrDefault(filesKey, new Map<string, ArrayBuffer>(), (files) => {
-      files.set(name, val);
-      return files;
-    });
+    ctx.state.updateOrDefault(
+      filesKey,
+      new Map<string, ArrayBuffer>(),
+      (files) => {
+        files.set(name, val);
+        return files;
+      },
+    );
     return name;
   },
   restore: (name, ctx) => {
@@ -28,7 +38,7 @@ const fileType: ICustomType<ArrayBuffer, string> = {
   },
 };
 
-test('Sanitize files using ctx.state', () => {
+Deno.test("Sanitize files using ctx.state", () => {
   const data: unknown = {
     arr: [
       {
@@ -46,11 +56,11 @@ test('Sanitize files using ctx.state', () => {
   expect(sanitized).toEqual({
     arr: [
       {
-        file1: ['file', expect.any(String)],
-        file2: ['file', expect.any(String)],
+        file1: ["file", expect.any(String)],
+        file2: ["file", expect.any(String)],
       },
     ],
-    file3: ['file', expect.any(String)],
+    file3: ["file", expect.any(String)],
   });
   expect(Array.from(state.getOrFail(filesKey).keys())).toEqual([
     expect.any(String),
@@ -59,7 +69,7 @@ test('Sanitize files using ctx.state', () => {
   ]);
 });
 
-test('Sanitize then restore files', () => {
+Deno.test("Sanitize then restore files", () => {
   const data = {
     arr: [
       {
@@ -75,7 +85,7 @@ test('Sanitize then restore files', () => {
 
   const state = createTypedMap();
   const sanitized = sanitize(data, state);
-  const restored = restore(sanitized, state) as any;
+  const restored = restore(sanitized, state) as typeof data;
   expect(restored).toEqual(data);
   expect(restored.file3).toBeInstanceOf(ArrayBuffer);
   expect(restored.file3).toBe(data.file3);

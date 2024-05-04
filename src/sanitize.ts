@@ -1,8 +1,8 @@
-import type { ITypedMap } from './typedMap';
-import { createTypedMap } from './typedMap';
-import type { ICheckContext, ISanitizeContext, TCustomTypes } from './types';
-import { defaultTypes, validateTypes } from './types';
-import { isPlainObject, mapObject } from './utils';
+import type { ITypedMap } from "./typedMap.ts";
+import { createTypedMap } from "./typedMap.ts";
+import type { ICheckContext, ISanitizeContext, TCustomTypes } from "./types.ts";
+import { defaultTypes, validateTypes } from "./types.ts";
+import { isPlainObject, mapObject } from "./utils.ts";
 
 export function createSanitize(customTypes: TCustomTypes): typeof sanitize {
   validateTypes(customTypes);
@@ -15,7 +15,11 @@ export function sanitize(data: unknown, state?: ITypedMap): unknown {
   return sanitizeInternal(data, defaultTypes, state);
 }
 
-function sanitizeInternal(data: unknown, customTypes: TCustomTypes, state: ITypedMap = createTypedMap()): unknown {
+function sanitizeInternal(
+  data: unknown,
+  customTypes: TCustomTypes,
+  state: ITypedMap = createTypedMap(),
+): unknown {
   const validTypes = customTypes.map((t) => t.name);
   const checkCtx: ICheckContext = {
     validTypes,
