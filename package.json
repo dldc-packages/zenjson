@@ -1,6 +1,6 @@
 {
   "name": "@dldc/zenjson",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "description": "Transform custom types into JSON-compatible data",
   "license": "MIT",
   "repository": {
