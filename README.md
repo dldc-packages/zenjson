@@ -18,7 +18,7 @@ original data.
 Here is a gist:
 
 ```ts
-import { restore, sanitize } from "https://deno.land/x/zenjson/mod.ts";
+import { restore, sanitize } from "@dldc/zenjson";
 
 const data = {
   createdAt: new Date(),
@@ -41,19 +41,16 @@ assert(parsed.nested.array[0] === Infinity);
 
 ```bash
 # npm
-npm install zenjson
-# yarb
-yarn add zenjson
+npm install @dldc/zenjson
+# yarn
+yarn add @dldc/zenjson
 ```
 
-You can also use this package in Deno / Recent Browser using ESM import like
-this:
+You can also use this package from a recent browser or Deno using a regular
+ESM import:
 
 ```js
-import { restore, sanitize } from "https://deno.land/x/zenjson/mod.ts";
-
-// don't forget to fix the version, for example https://deno.land/x/zenjson@v1.0.0/mod.ts
-// open https://deno.land/x/zenjson/mod.ts to find the latest one
+import { restore, sanitize } from "@dldc/zenjson";
 ```
 
 ## Suported data type
@@ -97,10 +94,7 @@ If you use one of the `create` function you probably want to add your own custom
 type:
 
 ```ts
-import {
-  createSanitize,
-  defaultTypes,
-} from "https://deno.land/x/zenjson/mod.ts";
+import { createSanitize, defaultTypes } from "@dldc/zenjson";
 
 const sanitize = createSanitize([
   // copy the default types
@@ -130,11 +124,7 @@ Here is an example of a custom type that handles
 [BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt):
 
 ```ts
-import {
-  createRestore,
-  createSanitize,
-  defaultTypes,
-} from "https://deno.land/x/zenjson/mod.ts";
+import { createRestore, createSanitize, defaultTypes } from "@dldc/zenjson";
 
 const bigintType = {
   name: "bigint",

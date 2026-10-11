@@ -1,4 +1,4 @@
-import { expect } from "$std/expect/mod.ts";
+import { expect, test } from "vite-plus/test";
 import {
   createRestore,
   createSanitize,
@@ -18,14 +18,10 @@ const fileType: ICustomType<ArrayBuffer, string> = {
   check: (val) => val instanceof ArrayBuffer,
   sanitize: (val, ctx) => {
     const name = Math.random().toString(36).substring(2);
-    ctx.state.updateOrDefault(
-      filesKey,
-      new Map<string, ArrayBuffer>(),
-      (files) => {
-        files.set(name, val);
-        return files;
-      },
-    );
+    ctx.state.updateOrDefault(filesKey, new Map<string, ArrayBuffer>(), (files) => {
+      files.set(name, val);
+      return files;
+    });
     return name;
   },
   restore: (name, ctx) => {
@@ -38,7 +34,7 @@ const fileType: ICustomType<ArrayBuffer, string> = {
   },
 };
 
-Deno.test("Sanitize files using ctx.state", () => {
+test("Sanitize files using ctx.state", () => {
   const data: unknown = {
     arr: [
       {
@@ -69,7 +65,7 @@ Deno.test("Sanitize files using ctx.state", () => {
   ]);
 });
 
-Deno.test("Sanitize then restore files", () => {
+test("Sanitize then restore files", () => {
   const data = {
     arr: [
       {

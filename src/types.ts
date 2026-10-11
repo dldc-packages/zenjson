@@ -38,8 +38,11 @@ export function isSanitizedTuple(
   validTypes: readonly string[],
 ): item is [string, unknown] {
   return Boolean(
-    item && Array.isArray(item) && item.length === 2 &&
-      typeof item[0] === "string" && validTypes.includes(item[0]),
+    item &&
+    Array.isArray(item) &&
+    item.length === 2 &&
+    typeof item[0] === "string" &&
+    validTypes.includes(item[0]),
   );
 }
 
@@ -60,14 +63,9 @@ export const undefinedType: ICustomType<undefined, null> = {
   restore: () => undefined,
 };
 
-export const specialNumberType: ICustomType<
-  number,
-  "Infinity" | "-Infinity" | "NaN"
-> = {
+export const specialNumberType: ICustomType<number, "Infinity" | "-Infinity" | "NaN"> = {
   name: "number",
-  check: (val) =>
-    typeof val === "number" &&
-    (val === Infinity || val === -Infinity || isNaN(val)),
+  check: (val) => typeof val === "number" && (val === Infinity || val === -Infinity || isNaN(val)),
   sanitize: (val) => {
     if (isNaN(val)) {
       return "NaN";
@@ -102,12 +100,7 @@ export const arrayType: ICustomType<Array<any>, Array<any>> = {
   restore: (val, ctx) => val.map((v) => ctx.restore(v)),
 };
 
-export const defaultTypes: TCustomTypes = [
-  dateType,
-  undefinedType,
-  specialNumberType,
-  arrayType,
-];
+export const defaultTypes: TCustomTypes = [dateType, undefinedType, specialNumberType, arrayType];
 
 export function validateTypes(types: TCustomTypes): void {
   const names = new Set();
